@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JobTitle {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @unique @db.VarChar(255)
+
+  jobDescriptions JobDescription[]
+
+  workExperiences WorkExperience[]
+
+  resumes Resume[]
+}
+
+model Company {
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  companyName    String   @unique @db.VarChar(255)
+  link           String?  @db.VarChar(255)
+  careerWebsites String[]
+
+  jobDescriptions JobDescription[]
+
+  workExperiences WorkExperience[]
+}
+
+enum WorkType {
+  Office
+  Remote
+  Hybrid
+}
+
+model JobDescription {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  link      String   @db.VarChar(255)
+  rawText   String
+  workType  WorkType
+
+  jobTitleId String
+  jobTitle   JobTitle @relation(fields: [jobTitleId], references: [id])
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  applications Application[]
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobDescriptionId String
+  jobDescription   JobDescription @relation(fields: [jobDescriptionId], references: [id])
+
+  technologies Technology[]
+
+  competencies Competency[]
+}
+
+model Technology {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  applications Application[]
+}
+
+model Competency {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  applications Application[]
+}
+
+model Achievement {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  description String @unique
+
+  workExperiences WorkExperience[]
+}
+
+model WorkExperience {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  description String
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  jobTitleId String
+  jobTitle   JobTitle @relation(fields: [jobTitleId], references: [id])
+
+  achievements Achievement[]
+}
+
+model Resume {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  publishDate DateTime
+  summary     String
+
+  jobTitleId String
+  jobTitle   JobTitle @relation(fields: [jobTitleId], references: [id])
+}
