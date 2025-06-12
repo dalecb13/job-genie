@@ -1,6 +1,5 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { WorkExperiencesService } from './work-experiences.service';
-import { CreateWorkExperienceDto } from './work-experience.model';
 
 @Controller('work-experiences')
 export class WorkExperiencesController {
@@ -9,7 +8,26 @@ export class WorkExperiencesController {
   ) {}
 
   @Post()
-  async createWorkExperience(dto: CreateWorkExperienceDto) {
-    return await this.workExperiencesService.createWorkExperience(dto);
+  async createWorkExperience(
+    @Body()
+    dto: {
+      startDate: string;
+      endDate: string;
+      location: string;
+      description: string;
+      jobTitleId: string;
+      companyId: string;
+    },
+  ) {
+    const { startDate, endDate, location, description, jobTitleId, companyId } =
+      dto;
+    return await this.workExperiencesService.createWorkExperience({
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      location,
+      description,
+      jobTitleId,
+      companyId,
+    });
   }
 }

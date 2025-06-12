@@ -74,6 +74,8 @@ model Application {
   technologies Technology[]
 
   competencies Competency[]
+
+  activities ActivityLog[]
 }
 
 model Technology {
@@ -135,4 +137,17 @@ model Resume {
 
   jobTitleId String
   jobTitle   JobTitle @relation(fields: [jobTitleId], references: [id])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activityDate DateTime
+  activityType String
+  note         String
+
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
 }
