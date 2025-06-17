@@ -4,11 +4,9 @@ import './index.css'
 import { RouterProvider } from "react-router";
 import router from './router/index.tsx';
 import {
-  QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-
-const queryClient = new QueryClient()
+import { queryClient } from './apis/query-client.ts';
 
 createRoot(document.getElementById('root')!)
   .render(

@@ -28,9 +28,10 @@ type Props = {
   options: ComboboxInput[]
   value: string
   onValueChange: (value: string) => void
+  onCreate: (value: string) => void
 }
 
-const Combobox: React.FC<Props> = ({ options, value, onValueChange, placeholder, emptyMessage }) => {
+const Combobox: React.FC<Props> = ({ options, value, onValueChange, placeholder, emptyMessage, onCreate }) => {
   const [open, setOpen] = React.useState(false)
   const [inputValue, setInputValue] = React.useState("")
 
@@ -60,7 +61,7 @@ const Combobox: React.FC<Props> = ({ options, value, onValueChange, placeholder,
           />
           <CommandList>
             <CommandEmpty
-              // onClick={() => handleCreate(inputValue)}
+              onClick={() => onCreate(inputValue)}
               className="cursor-pointer p-4 flex flex-col justify-center items-center"
             >
               <span>{ emptyMessage }.</span>

@@ -1,6 +1,6 @@
-import { getAllApplications } from "../../apis/applications.api";
+import { deleteApplicationById, getAllApplications } from "../../apis/applications.api";
 import { Link, useNavigate } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -10,10 +10,21 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { Application } from "@/models/application.model";
+import { queryClient } from "@/apis/query-client";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 
 const ApplicationsTable = () => {
   const navigate = useNavigate();
   const { isPending, isError, data: applications, error } = useQuery({ queryKey: ['applications'], queryFn: getAllApplications });
+  const deleteApplicationMutation = useMutation({
+    mutationFn: (applicationId: string) => {
+      return deleteApplicationById(applicationId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
+    }
+  })
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -39,6 +50,7 @@ const ApplicationsTable = () => {
                 <TableHead className="font-bold">Location</TableHead>
                 <TableHead className="font-bold">Status</TableHead>
                 <TableHead className="font-bold">Date</TableHead>
+                <TableHead className="font-bold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -55,6 +67,25 @@ const ApplicationsTable = () => {
                     <TableCell>{application.jobDescription.location || 'Madrid, Spain'}</TableCell>
                     <TableCell>{application.status || 'Started'}</TableCell>
                     <TableCell>{application.latestActivityDate || '2025-06-11'}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">...</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="" align="start">
+                          <DropdownMenuGroup>
+                            <DropdownMenuItem className="flex flex-col items-center">
+                              <Button
+                                variant={"outline"}
+                                onClick={() => deleteApplicationMutation.mutate(application.id)}
+                              >
+                                Delete
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
                   </TableRow>
                 ))
               }

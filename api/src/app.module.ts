@@ -11,6 +11,9 @@ import { TechnologiesModule } from './technologies/technologies.module';
 import { CompetenciesModule } from './competencies/competencies.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { WorkExperiencesModule } from './work-experiences/work-experiences.module';
+import { JobScraperModule } from './job-scraper/job-scraper.module';
+import { ExtractModule } from './extract/extract.module';
+import { ApplicationActivityModule } from './application-activity/application-activity.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { WorkExperiencesModule } from './work-experiences/work-experiences.modul
     CompetenciesModule,
     AchievementsModule,
     WorkExperiencesModule,
+    JobScraperModule,
+    ExtractModule,
+    ApplicationActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

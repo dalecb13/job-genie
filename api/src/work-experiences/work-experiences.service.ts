@@ -7,7 +7,12 @@ export class WorkExperiencesService {
   constructor(private prisma: PrismaService) {}
 
   async getWorkExperiences() {
-    return await this.prisma.workExperience.findMany();
+    return await this.prisma.workExperience.findMany({
+      include: {
+        jobTitle: true,
+        company: true,
+      },
+    });
   }
 
   async createWorkExperience(dto: CreateWorkExperienceDto) {

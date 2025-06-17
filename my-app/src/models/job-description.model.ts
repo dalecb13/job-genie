@@ -22,4 +22,5 @@ export type CreateJobDescriptionDto = {
   companyId: string;
   jobTitleId: string;
   workType: WorkType;
+  location: string;
 }

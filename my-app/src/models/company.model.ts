@@ -1,7 +1,7 @@
 export type Company = {
   id: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   companyName: string;
   website: string | null;
 }

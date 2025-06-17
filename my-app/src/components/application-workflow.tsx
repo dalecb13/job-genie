@@ -32,7 +32,7 @@ const applicationSchema = z.object({
   competencies: z.array(z.string()),
 });
 
-const ApplicationBuilder = () => {
+const ApplicationWorkflow = () => {
   const [tab, setTab] = useState(0);
   
   const [companyId, setCompanyId] = useState("");
@@ -82,4 +82,4 @@ const ApplicationBuilder = () => {
   )
 };
 
-export default ApplicationBuilder;
+export default ApplicationWorkflow;

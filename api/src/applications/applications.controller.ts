@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { TechnologyDomain } from 'src/models/technology.domain';
 import { CompetencyDomain } from 'src/models/competency.domain';
@@ -41,5 +49,11 @@ export class ApplicationsController {
       technologies,
       competencies,
     );
+  }
+
+  @Delete(':id')
+  deleteApplication(@Param() params: { id: string }) {
+    const { id } = params;
+    return this.applicationsService.deleteApplicationById(id);
   }
 }

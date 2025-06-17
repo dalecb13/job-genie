@@ -33,6 +33,7 @@ export class JobDescriptionService {
     companyId: string;
     jobTitleId: string;
     workType: string;
+    location: string;
   }): Promise<JobDescription> {
     const wt = data.workType as WorkType;
 
@@ -41,6 +42,7 @@ export class JobDescriptionService {
         link: data.link,
         rawText: data.rawText,
         workType: wt,
+        location: data.location,
         jobTitle: {
           connect: {
             id: data.jobTitleId,
@@ -72,6 +74,12 @@ export class JobDescriptionService {
     const { where, data } = params;
     return this.prisma.jobDescription.update({
       data,
+      where,
+    });
+  }
+
+  deleteJobDescription(where: Prisma.JobDescriptionWhereUniqueInput) {
+    return this.prisma.jobDescription.delete({
       where,
     });
   }

@@ -53,6 +53,10 @@ model JobDescription {
   link      String   @db.VarChar(255)
   rawText   String
   workType  WorkType
+  location  String   @default("")
+
+  technologies Technology[]
+  competencies Competency[]
 
   jobTitleId String
   jobTitle   JobTitle @relation(fields: [jobTitleId], references: [id])
@@ -86,6 +90,8 @@ model Technology {
   name String @unique
 
   applications Application[]
+
+  JobDescription JobDescription[]
 }
 
 model Competency {
@@ -96,6 +102,8 @@ model Competency {
   name String @unique
 
   applications Application[]
+
+  JobDescription JobDescription[]
 }
 
 model Achievement {
@@ -150,4 +158,15 @@ model ActivityLog {
 
   applicationId String
   application   Application @relation(fields: [applicationId], references: [id])
+}
+
+model ExtractJob {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inputText String
+  prompt String
+  extractedText String[]
+  extractionParameters String
 }

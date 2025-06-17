@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { JobDescriptionService } from './job-description.service';
 import { JobDescription, WorkType } from '@prisma/client';
 
@@ -37,9 +45,10 @@ export class JobDescriptionController {
       companyId: string;
       jobTitleId: string;
       workType: string;
+      location: string;
     },
   ): Promise<JobDescription> {
-    const { link, rawText, companyId, jobTitleId, workType } =
+    const { link, rawText, companyId, jobTitleId, workType, location } =
       jobDescriptionData;
     const wt: WorkType = workType as WorkType;
     return this.jobDescriptionService.createJobDescription({
@@ -48,6 +57,13 @@ export class JobDescriptionController {
       companyId,
       jobTitleId,
       workType: wt,
+      location,
     });
+  }
+
+  @Delete(':id')
+  deleteJobDescriptionById(@Param() params: any) {
+    const { id } = params;
+    return this.jobDescriptionService.deleteJobDescription({ id });
   }
 }

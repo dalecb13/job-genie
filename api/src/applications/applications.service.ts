@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { ApplicationActivityService } from 'src/application-activity/application-activity.service';
 import { CompetencyDomain } from 'src/models/competency.domain';
 import { TechnologyDomain } from 'src/models/technology.domain';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private activityService: ApplicationActivityService,
+  ) {}
 
-  createApplication({ jobDescriptionId }: { jobDescriptionId: string }) {
-    return this.prisma.application.create({
+  async createApplication({ jobDescriptionId }: { jobDescriptionId: string }) {
+    const application = await this.prisma.application.create({
       data: {
         jobDescriptionId,
       },
     });
+
+    this.activityService.addActivity(application.id, new Date(), 'STARTED', '');
+
+    return application;
   }
 
   updateApplication(
@@ -103,6 +111,14 @@ export class ApplicationsService {
         },
         technologies: true,
         competencies: true,
+      },
+    });
+  }
+
+  deleteApplicationById(id: string) {
+    return this.prisma.application.delete({
+      where: {
+        id,
       },
     });
   }

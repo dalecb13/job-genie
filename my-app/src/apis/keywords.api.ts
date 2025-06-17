@@ -43,9 +43,22 @@ const updateKeywords = async (
   return data;
 };
 
+const extractTechnologies = async (description: string) => {
+  const response = await fetch(`http://localhost:3000/extract/technologies`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ description }),
+  });
+  const data = await response.json();
+  return data;
+}
+
 export {
   getAllKeywords,
   getKeywordById,
   createKeywords,
   updateKeywords,
+  extractTechnologies,
 };

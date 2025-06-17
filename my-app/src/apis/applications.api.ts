@@ -8,7 +8,7 @@ const getAllApplications = async () => {
   return applications;
 };
 
-const createApplication = async (jobDescriptionId: string) => {
+const createApplication = async (jobDescriptionId: string): Promise<Application> => {
   const createResponse = await fetch('http://localhost:3000/applications', {
     method: 'POST',
     headers: {
@@ -40,4 +40,12 @@ const updateApplication = async (applicationId: string, technologies: Technology
   })
 }
 
-export { createApplication, getAllApplications, getApplicationbyId, setApplicationId, updateApplication }
+const deleteApplicationById = async (id: string) => {
+  const deleteResponse = await fetch(`http://localhost:3000/applications/${id}`, {
+    method: 'DELETE',
+  });
+  const data = await deleteResponse.json();
+  return data;
+}
+
+export { deleteApplicationById, createApplication, getAllApplications, getApplicationbyId, setApplicationId, updateApplication }

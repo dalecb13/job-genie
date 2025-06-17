@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { WorkExperiencesService } from './work-experiences.service';
 
 @Controller('work-experiences')
@@ -6,6 +6,11 @@ export class WorkExperiencesController {
   constructor(
     private readonly workExperiencesService: WorkExperiencesService,
   ) {}
+
+  @Get()
+  async getWorkExperiences() {
+    return await this.workExperiencesService.getWorkExperiences();
+  }
 
   @Post()
   async createWorkExperience(

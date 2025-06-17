@@ -12,6 +12,8 @@ import ApplicationsPage from "../pages/applications.page";
 import ApplicationStartPage from "../pages/application-start.page";
 import ApplicationPage from "@/pages/application.page";
 import JobDescriptionDetailsPage from "@/pages/job-description-details.page";
+import WorkExperiencesPage from "@/pages/work-experiences.page";
+import JobDescriptionExtractPage from "@/pages/job-description-extract.page";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
             element: <JobDescriptionDetailsPage />,
           },
           {
+            path: "/job-descriptions/:id/extract",
+            element: <JobDescriptionExtractPage />,
+          },
+          {
             path: "/applications",
             element: <ApplicationsPage />,
           },
@@ -68,6 +74,10 @@ const router = createBrowserRouter([
           {
             path: "/applications/:id",
             element: <ApplicationPage />,
+          },
+          {
+            path: '/work-experiences',
+            element: <WorkExperiencesPage />
           }
         ],
       },

@@ -1,8 +1,7 @@
-import ApplicationBuilder from "@/components/application-builder";
+import ApplicationBuilder from "@/components/application/application-builder";
 
 const ApplicationStartPage = () => {
   return (
-    // <ApplicationWizard />
     <ApplicationBuilder />
   )
 }
