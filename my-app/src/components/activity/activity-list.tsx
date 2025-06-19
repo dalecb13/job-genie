@@ -25,7 +25,7 @@ const ActivityList: React.FC<Props> = ({ activities }) => {
         {activities.map((activity) => (
           <TableRow key={activity.id}>
             <TableCell>{activity.activityType}</TableCell>
-            <TableCell>{activity.activityDate.toISOString()}</TableCell>
+            <TableCell>{activity.activityDate.toLocaleDateString()}</TableCell>
             <TableCell>{activity.note}</TableCell>
           </TableRow>
         ))}

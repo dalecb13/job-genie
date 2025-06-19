@@ -135,8 +135,10 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
       <p className="text-2xl font-bold">{application!.jobDescription.jobTitle.title} @ {application!.jobDescription.company.companyName}</p>
       <p className="text-xl mb-4">{application!.jobDescription.workType} - {application!.jobDescription.location}</p>
 
-      <div className="border border-gray-300 p-2 rounded max-h-500 w-1/2 overflow-scroll">
-        <AddActivityButton applicationId={application.id} />
+      <div className="border border-gray-300 p-2 rounded max-h-500 overflow-scroll flex flex-col gap-2">
+        <div className="flex justify-end">
+          <AddActivityButton applicationId={application.id} />
+        </div>
         <ActivityList activities={application.activities} />
       </div>
 
