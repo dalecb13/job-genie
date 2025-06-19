@@ -89,10 +89,11 @@ export class ApplicationsService {
           include: {
             company: true,
             jobTitle: true,
+            technologies: true,
+            competencies: true,
           },
         },
-        technologies: true,
-        competencies: true,
+        activities: true,
       },
     });
   }
@@ -107,10 +108,11 @@ export class ApplicationsService {
           include: {
             company: true,
             jobTitle: true,
+            technologies: true,
+            competencies: true,
           },
         },
-        technologies: true,
-        competencies: true,
+        activities: true,
       },
     });
   }

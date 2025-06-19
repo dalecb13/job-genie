@@ -165,8 +165,8 @@ model ExtractJob {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  inputText String
-  prompt String
-  extractedText String[]
+  inputText            String
+  prompt               String
+  extractedText        String[]
   extractionParameters String
 }

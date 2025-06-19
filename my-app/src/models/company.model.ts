@@ -8,9 +8,9 @@ export type Company = {
 
 export type CompanyModel = {
   id: string;
-  created_at: string;
-  updated_at: string;
-  company_name: string;
+  createdAt: string;
+  updatedAt: string;
+  companyName: string;
   link: string;
 }
 

@@ -7,7 +7,7 @@ import { useParams } from "react-router";
 
 const ApplicationPage = () => {
   const { id } = useParams();
-  const { data: application, isLoading, isError, error } = useQuery({ queryKey: ['applications', id], queryFn: () => getApplicationbyId(id) });
+  const { data: application, isLoading, isError, error } = useQuery({ queryKey: ['application', id], queryFn: () => getApplicationbyId(id) });
   
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -20,13 +20,9 @@ const ApplicationPage = () => {
   }
 
   return (
-    <div>
-      <h1>Application</h1>
-
-      <Suspense fallback={<p>Loading...</p>}>
-        <ApplicationDetails application={application} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<p>Loading...</p>}>
+      <ApplicationDetails application={application} />
+    </Suspense>
   )
 }
 

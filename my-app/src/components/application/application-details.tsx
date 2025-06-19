@@ -12,6 +12,8 @@ import createCompetency from "@/apis/competency.api";
 import { updateApplication } from "@/apis/applications.api";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import ActivityList from "../activity/activity-list";
+import AddActivityButton from "../activity/add-activity";
 
 type Props = {
   application: Application
@@ -37,8 +39,8 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
   })
   const [ technologyName, setTechnologyName ] = useState<string>('');
   const [ competencyName, setCompetencyName ] = useState<string>('');
-  const [ technologies, setTechnologies ] = useState<Technology[]>(application.technologies);
-  const [ competencies, setCompetencies ] = useState<Competency[]>(application.competencies);
+  const [ technologies, setTechnologies ] = useState<Technology[]>(application.jobDescription.technologies);
+  const [ competencies, setCompetencies ] = useState<Competency[]>(application.jobDescription.competencies);
 
   const handleAddTechnology = () => {
     createTechnologyMutation.mutate(technologyName, {
@@ -130,7 +132,13 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
 
   return (
     <div>
-      <p>{application!.jobDescription.jobTitle.title} @ {application!.jobDescription.company.companyName}</p>
+      <p className="text-2xl font-bold">{application!.jobDescription.jobTitle.title} @ {application!.jobDescription.company.companyName}</p>
+      <p className="text-xl mb-4">{application!.jobDescription.workType} - {application!.jobDescription.location}</p>
+
+      <div className="border border-gray-300 p-2 rounded max-h-500 w-1/2 overflow-scroll">
+        <AddActivityButton applicationId={application.id} />
+        <ActivityList activities={application.activities} />
+      </div>
 
       <div className="flex flex-row gap-4">
         <div className="border border-gray-300 p-2 rounded max-h-500 w-1/2 overflow-scroll">
@@ -158,18 +166,22 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
           <div>
             <p>Technologies</p>
             <div className="flex flex-wrap gap-2 mb-2">
-              {technologies.map((technology) => (
-                <div
-                  key={technology.id}
-                  className="flex flex-none flex-row grow-0 justify-center items-center gap-2 w-auto bg-slate-200 py-1 px-3 rounded-2xl"
-                >
-                  <span>{technology.name}</span>
-                  <XIcon
-                    className="flex-none size-4 cursor-pointer"
-                    onClick={() => handleRemoveTechnology(technology)}
-                  />
-                </div>
-              ))}
+              {
+                !technologies || technologies.length === 0
+                ? <p>No technologies</p>
+                : technologies.map((technology) => (
+                  <div
+                    key={technology.id}
+                    className="flex flex-none flex-row grow-0 justify-center items-center gap-2 w-auto bg-slate-200 py-1 px-3 rounded-2xl"
+                  >
+                    <span>{technology.name}</span>
+                    <XIcon
+                      className="flex-none size-4 cursor-pointer"
+                      onClick={() => handleRemoveTechnology(technology)}
+                    />
+                  </div>
+                  ))
+              }
             </div>
 
             <div className="flex flex-row gap-2">
@@ -192,15 +204,19 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
           <div>
             <p>Competencies</p>
             <div className="flex flex-wrap gap-2 mb-2">
-              {competencies.map((competency) => (
-                <li
-                  className="flex flex-none flex-row grow-0 justify-center items-center gap-2 w-auto bg-slate-200 py-1 px-3 rounded-2xl"
-                  key={competency.id}
-                >
-                  <span>{competency.name}</span>
-                  <XIcon className="flex-none size-4 cursor-pointer" onClick={() => handleRemoveCompetency(competency)} />
-                </li>
-              ))}
+              {
+                !competencies || competencies.length === 0
+                ? <p>No competencies</p>
+                : competencies.map((competency) => (
+                    <li
+                      className="flex flex-none flex-row grow-0 justify-center items-center gap-2 w-auto bg-slate-200 py-1 px-3 rounded-2xl"
+                      key={competency.id}
+                    >
+                      <span>{competency.name}</span>
+                      <XIcon className="flex-none size-4 cursor-pointer" onClick={() => handleRemoveCompetency(competency)} />
+                    </li>
+                  ))
+              }
             </div>
 
             <div className="flex flex-row gap-2">
