@@ -1,4 +1,4 @@
-import type { AddCompanyDto, Company, CompanyModel } from "../models/company.model";
+import type { AddCompanyDto, Company, PaginatedCompanies, PaginatedCompanyResponse } from "../models/company.model";
 // import supabase from "../utils/supabase";
 
 const getAllCompanies = async (): Promise<Company[]> => {
@@ -7,19 +7,23 @@ const getAllCompanies = async (): Promise<Company[]> => {
   return companies;
 }
 
-const getCompaniesPage = async (pageNumber: number, pageSize: number): Promise<Company[]> => {
+const getCompaniesPage = async (pageNumber: number, pageSize: number): Promise<PaginatedCompanies> => {
   const take = pageSize;
   const skip = (pageNumber - 1) * take;
   const response = await fetch(`http://localhost:3000/company?take=${take}&skip=${skip}`);
-  const companyModels: CompanyModel[] = await response.json();
-  const companies: Company[] = companyModels.map((companyModel) => ({
+  const paginatedCompanyResponse: PaginatedCompanyResponse = await response.json();
+  const companies: Company[] = paginatedCompanyResponse.companies.map((companyModel) => ({
     id: companyModel.id,
     createdAt: new Date(companyModel.createdAt),
     updatedAt: new Date(companyModel.updatedAt),
     companyName: companyModel.companyName,
     website: companyModel.link
   }))
-  return companies;
+  const paginatedCompanies: PaginatedCompanies = {
+    companies,
+    total: paginatedCompanyResponse.total
+  }
+  return paginatedCompanies;
 }
 
 const createCompany = async (addCompanyDto: AddCompanyDto): Promise<Company> => {

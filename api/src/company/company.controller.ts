@@ -7,10 +7,7 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Get()
-  getCompanies(
-    @Query('skip') skip: number,
-    @Query('take') take: number,
-  ): Promise<Company[]> {
+  getCompanies(@Query('skip') skip: number, @Query('take') take: number) {
     return this.companyService.companies({
       skip: Number(skip),
       take: Number(take),

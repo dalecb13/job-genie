@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class CompanyService {
   constructor(private prisma: PrismaService) {}
 
-  async companies(params: { skip: number; take: number }): Promise<Company[]> {
+  async companies(params: { skip: number; take: number }) {
     const { skip, take } = params;
     const companies = await this.prisma.company.findMany({
       skip,
@@ -16,7 +16,12 @@ export class CompanyService {
       },
     });
 
-    return companies;
+    const total = await this.prisma.company.count();
+
+    return {
+      companies,
+      total,
+    };
   }
 
   async createCompany(data: Prisma.CompanyCreateInput): Promise<Company> {

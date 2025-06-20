@@ -18,3 +18,13 @@ export type AddCompanyDto = {
   companyName: string;
   link?: string;
 }
+
+export type PaginatedCompanyResponse = {
+  companies: CompanyModel[];
+  total: number;
+}
+
+export type PaginatedCompanies = {
+  companies: Company[];
+  total: number;
+}
