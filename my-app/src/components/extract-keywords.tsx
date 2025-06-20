@@ -13,7 +13,7 @@ const ExtractKeywords: React.FC<Props> = ({ jobDescription }) => {
   const editor = useEditor({
     shouldRerenderOnTransaction: true,
     content: jobDescription?.rawText,
-    extensions: extensions,
+    extensions,
   });
   const handleExtractTechnologiesMutation = useMutation({
     mutationFn: (description: string) => {

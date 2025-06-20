@@ -11,9 +11,9 @@ import { createTechnology } from "@/apis/technology.api";
 import createCompetency from "@/apis/competency.api";
 import { updateApplication } from "@/apis/applications.api";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import ActivityList from "../activity/activity-list";
 import AddActivityButton from "../activity/add-activity";
+import { extensions } from "@/lib/editor.utils";
 
 type Props = {
   application: Application
@@ -32,9 +32,7 @@ const ApplicationDetails: React.FC<Props> = ({ application }) => {
     }
   })
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-    ],
+    extensions,
     content: application.jobDescription.rawText,
   })
   const [ technologyName, setTechnologyName ] = useState<string>('');

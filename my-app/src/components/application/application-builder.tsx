@@ -6,26 +6,11 @@ import Combobox from "../ui/combobox";
 import { createCompany, getAllCompanies } from "@/apis/companies.api";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { EditorProvider } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import type { CreateJobDescriptionDto } from "@/models/job-description.model";
 import { createJobDescription } from "@/apis/job-descriptions.api";
 import type { WorkType } from "@/models/work-type.enum";
 import { createJobTitle, getJobTitles } from "@/apis/job-titles.api";
-
-const extensions = [
-  // Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  // TextStyle.configure({ types: [ListItem.name] }),
-  StarterKit.configure({
-    bulletList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-    orderedList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-  }),
-];
+import { extensions } from "@/lib/editor.utils";
 
 const ApplicationBuilder = () => {
   const { data: companies } = useQuery({ queryKey: ['companies'], queryFn: getAllCompanies });

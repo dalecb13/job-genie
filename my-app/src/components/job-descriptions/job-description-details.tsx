@@ -1,26 +1,11 @@
 import type { JobDescription } from "@/models/job-description.model";
 import { EditorProvider } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { updateJobDescription } from "@/apis/job-descriptions.api";
 import React from "react";
 import { useNavigate } from "react-router";
-
-const extensions = [
-  // Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  // TextStyle.configure({ types: [ListItem.name] }),
-  StarterKit.configure({
-    bulletList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-    orderedList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-  }),
-]
+import { extensions } from "@/lib/editor.utils";
 
 const JobDescriptionDetails = ({ jobDescription }: { jobDescription: JobDescription }) => {
   const [ rawText, setRawText ] = React.useState(jobDescription.rawText)

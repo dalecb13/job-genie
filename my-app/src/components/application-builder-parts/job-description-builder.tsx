@@ -1,5 +1,5 @@
-import { getJobTitles } from "@/apis/job-titles.api"
-import { useQuery } from "@tanstack/react-query"
+import { createJobTitle, getJobTitles } from "@/apis/job-titles.api"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import Combobox from "../ui/combobox"
 import {
@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/select"
 import { Input } from "../ui/input"
 import { EditorProvider } from "@tiptap/react"
-import StarterKit from "@tiptap/starter-kit";
 import { Button } from "../ui/button"
+import { extensions } from "@/lib/editor.utils"
 
 type Props = {
   jobTitle: string
@@ -32,21 +32,6 @@ type Props = {
   handleNext: () => void
 }
 
-const extensions = [
-  // Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  // TextStyle.configure({ types: [ListItem.name] }),
-  StarterKit.configure({
-    bulletList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-    orderedList: {
-      keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-    },
-  }),
-]
-
 const JobDescriptionBuilder: React.FC<Props> = ({
   location,
   jobDescriptionLink,
@@ -60,6 +45,12 @@ const JobDescriptionBuilder: React.FC<Props> = ({
   const [jobTitleId, setJobTitleId] = useState('');
   const { data: jobTitles, isLoading, isError, error } = useQuery({ queryKey: ['jobTitles'], queryFn: getJobTitles });
 
+  const createJobTitleMutation = useMutation({
+    mutationFn: (name: string) => {
+      return createJobTitle(name);
+    }
+  });
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   if (!jobTitles) return <p>No job titles found</p>;
@@ -69,6 +60,10 @@ const JobDescriptionBuilder: React.FC<Props> = ({
     value: jobTitle.id
   }));
 
+  const handleCreateJobTitle = (name: string) => {
+    createJobTitleMutation.mutate(name);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       <Combobox
@@ -77,6 +72,7 @@ const JobDescriptionBuilder: React.FC<Props> = ({
         options={jobTitleOptions}
         value={jobTitleId}
         onValueChange={setJobTitleId}
+        onCreate={handleCreateJobTitle}
       />
       <Select
         onValueChange={handleWorkTypeChange}
