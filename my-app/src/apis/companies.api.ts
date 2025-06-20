@@ -1,9 +1,24 @@
-import type { AddCompanyDto, Company } from "../models/company.model";
+import type { AddCompanyDto, Company, CompanyModel } from "../models/company.model";
 // import supabase from "../utils/supabase";
 
 const getAllCompanies = async (): Promise<Company[]> => {
   const response = await fetch('http://localhost:3000/company');
   const companies: Company[] = await response.json();
+  return companies;
+}
+
+const getCompaniesPage = async (pageNumber: number, pageSize: number): Promise<Company[]> => {
+  const take = pageSize;
+  const skip = (pageNumber - 1) * take;
+  const response = await fetch(`http://localhost:3000/company?take=${take}&skip=${skip}`);
+  const companyModels: CompanyModel[] = await response.json();
+  const companies: Company[] = companyModels.map((companyModel) => ({
+    id: companyModel.id,
+    createdAt: new Date(companyModel.createdAt),
+    updatedAt: new Date(companyModel.updatedAt),
+    companyName: companyModel.companyName,
+    website: companyModel.link
+  }))
   return companies;
 }
 
@@ -23,29 +38,6 @@ const createCompany = async (addCompanyDto: AddCompanyDto): Promise<Company> => 
     console.warn(error);
     throw error;
   }
-  // const { data, error } = await supabase
-  //   .from("companies")
-  //   .insert({
-  //     company_name: addCompanyDto.companyName,
-  //     link: addCompanyDto.website,
-  //   })
-  //   .select()
-  //   .single();
-  
-  // if (error) {
-  //   console.warn(error);
-  //   throw error;
-  // }
-
-  // const company: Company = {
-  //   id: data.id,
-  //   createdAt: data.created_at,
-  //   updatedAt: data.updated_at,
-  //   companyName: data.company_name,
-  //   website: data.link
-  // }
-
-  // return company;
 };
 
-export { getAllCompanies, createCompany };
+export { getAllCompanies, createCompany, getCompaniesPage };

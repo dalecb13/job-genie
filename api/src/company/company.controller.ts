@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Company } from '@prisma/client';
 
@@ -7,8 +7,14 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Get()
-  getCompanies(): Promise<Company[]> {
-    return this.companyService.companies({});
+  getCompanies(
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ): Promise<Company[]> {
+    return this.companyService.companies({
+      skip: Number(skip),
+      take: Number(take),
+    });
   }
 
   @Post()

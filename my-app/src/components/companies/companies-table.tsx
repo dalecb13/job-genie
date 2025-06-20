@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { getAllCompanies } from "../../apis/companies.api";
+import { getAllCompanies, getCompaniesPage } from "../../apis/companies.api";
 import {
   Pagination,
   PaginationContent,
@@ -18,12 +18,27 @@ import {
 } from "@/components/ui/pagination"
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const CompaniesTable = () => {
-  const { data: companies, isLoading, isError, error } = useQuery({ queryKey: ['companies'], queryFn: getAllCompanies });
+  const [ pageNumbers, setPageNumbers ] = useState<number[]>([1]);
+  const [ currentPage, setCurrentPage ] = useState(1);
+  const { data: companies, isLoading, isError, error } = useQuery({ queryKey: ['companiesPage'], queryFn: () => getCompaniesPage(currentPage, 10) });
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
+
+  if (!companies) {
+    toast.error('Could not find companies')
+    return <p>
+      Could not find companies
+    </p>
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  }
 
   return (
     <>
@@ -59,12 +74,18 @@ const CompaniesTable = () => {
                 <PaginationItem>
                   <PaginationPrevious href="#" />
                 </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
+                {/* {
+                  pageNumbers.map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink href="#" onClick={() => handlePageChange(page)}>
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))
+                } */}
+                {/* <PaginationItem>
                   <PaginationEllipsis />
-                </PaginationItem>
+                </PaginationItem> */}
                 <PaginationItem>
                   <PaginationNext href="#" />
                 </PaginationItem>
