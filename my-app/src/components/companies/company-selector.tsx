@@ -1,4 +1,4 @@
-import { getAllCompanies } from "../../apis/companies.api";
+import { getCompaniesPage } from "../../apis/companies.api";
 import type { Company } from "../../models/company.model";
 import {
   Select,
@@ -15,39 +15,46 @@ type Props = {
 }
 
 const CompanySelector: React.FC<Props> = ({ onSelectCompany }) => {
-  const { data: companies, isLoading, isError, error } = useQuery({ queryKey: ['companies'], queryFn: getAllCompanies });
+  const { data: companiesResponse, isLoading, isError, error, isFetching } = useQuery({ queryKey: ['companies'], queryFn: () => getCompaniesPage(1, 100) });
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  if (!companies) {
+  if (!companiesResponse && !isFetching) {
     toast.error('Could not find companies')
     return <p>
       Could not find companies
     </p>
   }
 
+  if (!companiesResponse) {
+    return <p>Loading...</p>
+  }
+
   const handleCompanySelect = (companyId: string) => {
-    const company = companies
+    const company = companiesResponse
+      .companies
       .find((company) => company.id === companyId);
     onSelectCompany(company);
   }
 
   return (
     <Select onValueChange={handleCompanySelect}>
-      <SelectTrigger className="w-[280px]">
+      <SelectTrigger className="">
         <SelectValue placeholder="Select company" />
       </SelectTrigger>
       <SelectContent>
         {
-          companies.map((company) => (
-            <SelectItem
-              key={company.id}
-              value={company.id}
-            >
-              {company.companyName}
-            </SelectItem>
-          ))
+          companiesResponse
+            .companies
+            .map((company) => (
+              <SelectItem
+                key={company.id}
+                value={company.id}
+              >
+                {company.companyName}
+              </SelectItem>
+            ))
         }
       </SelectContent>
     </Select>

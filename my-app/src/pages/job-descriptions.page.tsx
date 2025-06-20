@@ -2,11 +2,7 @@ import JobDescriptionsList from "../components/job-descriptions/job-descriptions
 
 const JobDescriptionsPage = () => {
   return (
-    <>
-      <h1>Job Descriptions</h1>
-
-      <JobDescriptionsList />
-    </>
+    <JobDescriptionsList />
   )
 }
 

@@ -4,11 +4,13 @@ import { useNavigate } from "react-router";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const CreateCompanyPage = () => {
   const navigate = useNavigate();
   const [ companyName, setCompanyName ] = useState('');
   const [ link, setLink ] = useState('');
+  const [ description, setDescription ] = useState('');
   const [ isLoading, setIsLoading ] = useState(false);
 
   const handleCompanyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +55,16 @@ const CreateCompanyPage = () => {
           onChange={handleWebsiteChange}
           placeholder="www.example.com"
         ></Input>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="companyDescription">Description</Label>
+        <Textarea
+          id="companyDescription"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder=""
+        />
       </div>
 
       <Button

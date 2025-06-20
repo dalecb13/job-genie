@@ -1,5 +1,4 @@
 import type { AddCompanyDto, Company, PaginatedCompanies, PaginatedCompanyResponse } from "../models/company.model";
-// import supabase from "../utils/supabase";
 
 const getAllCompanies = async (): Promise<Company[]> => {
   const response = await fetch('http://localhost:3000/company');

@@ -16,12 +16,18 @@ export class CompanyController {
 
   @Post()
   async createCompany(
-    @Body() companyData: { companyName: string; link?: string },
+    @Body()
+    companyData: {
+      companyName: string;
+      link?: string;
+      description?: string;
+    },
   ): Promise<Company> {
-    const { companyName, link } = companyData;
+    const { companyName, link, description } = companyData;
     return this.companyService.createCompany({
       companyName,
       link,
+      description,
     });
   }
 }
